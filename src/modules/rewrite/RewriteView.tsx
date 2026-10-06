@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PenTool, Sparkles, Copy, Check } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -23,11 +23,19 @@ export const RewriteView: React.FC = () => {
   const [selectedMode, setSelectedMode] = useState('Professional');
   const [customInstruction, setCustomInstruction] = useState('');
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleRewrite = () => {
     if (!inputText.trim()) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('THINKING', `Polishing text (${selectedMode})...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', 'Text refined successfully');
       if (customInstruction.toLowerCase().includes('rector') || customInstruction.toLowerCase().includes('rektor')) {
         setOutputText('Hurmatli rektor janoblari, Sizga joriy ta\'lim loyihasining hisoboti va istiqbolli rejalarini ko\'rib chiqishingiz uchun ehtirom bilan taqdim etamiz.');

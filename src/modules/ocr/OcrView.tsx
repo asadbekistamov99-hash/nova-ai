@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ScanText, Upload, Table, FileText, Copy, Download, Bot } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -13,10 +13,18 @@ export const OcrView: React.FC = () => {
   const [ocrText, setOcrText] = useState(
     '| ID | Mahsulot Nomi | Miqdor | Narxi |\n|---|---|---|---|\n| 101 | AI Server GPU | 4 ta | $12,000 |\n| 102 | Workstation PC | 8 ta | $14,400 |'
   );
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleSimulateOcr = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('PROCESSING', 'Processing image with Local OCR engine...');
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', 'OCR extraction finished');
     }, 1000);
   };

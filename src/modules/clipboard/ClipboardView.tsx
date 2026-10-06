@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ClipboardList, Search, Pin, Star, Trash2, Sparkles, Shield, Copy, Check } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -18,6 +18,7 @@ export const ClipboardView: React.FC = () => {
   const [monitoringEnabled, setMonitoringEnabled] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const [items, setItems] = useState<ClipEntry[]>([
     {
@@ -46,6 +47,12 @@ export const ClipboardView: React.FC = () => {
     },
   ]);
 
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
+
   const handleTogglePin = (id: string) => {
     setItems((prev) =>
       prev.map((it) => (it.id === id ? { ...it, isPinned: !it.isPinned } : it))
@@ -57,8 +64,9 @@ export const ClipboardView: React.FC = () => {
   };
 
   const handleAiAction = (action: string, content: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('THINKING', `Applying AI ${action}...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', `AI ${action} completed`);
     }, 900);
   };

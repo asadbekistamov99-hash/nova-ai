@@ -6,6 +6,9 @@ export interface SettingsState {
   globalShortcut: string;
   autoStart: boolean;
   localOllamaUrl: string;
+  gemini_api_key: string;
+  openai_api_key: string;
+  claude_api_key: string;
 }
 
 const DEFAULT_SETTINGS: SettingsState = {
@@ -14,6 +17,9 @@ const DEFAULT_SETTINGS: SettingsState = {
   globalShortcut: 'Ctrl+Space',
   autoStart: false,
   localOllamaUrl: 'http://127.0.0.1:11434',
+  gemini_api_key: '',
+  openai_api_key: '',
+  claude_api_key: '',
 };
 
 let currentSettings: SettingsState = { ...DEFAULT_SETTINGS };

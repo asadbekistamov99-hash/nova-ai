@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Users, Mic, Radio, CheckSquare, Calendar, Download, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -8,6 +8,13 @@ export const MeetingNotesView: React.FC = () => {
   const { setRobotState } = useRobot();
   const [isRecording, setIsRecording] = useState(false);
   const [hasUserConsent, setHasUserConsent] = useState(true);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const toggleRecording = () => {
     if (!hasUserConsent) {
@@ -16,9 +23,10 @@ export const MeetingNotesView: React.FC = () => {
     }
 
     if (isRecording) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsRecording(false);
       setRobotState('PROCESSING', 'Synthesizing meeting notes and action items...');
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setRobotState('SUCCESS', 'Meeting notes generated!');
       }, 1200);
     } else {

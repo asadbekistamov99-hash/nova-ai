@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Crop, Monitor, Scan, Sparkles, Languages, FileText, CheckCircle2 } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -9,10 +9,18 @@ export const ScreenshotAiView: React.FC = () => {
   const [capturedPreview, setCapturedPreview] = useState<string | null>(null);
   const [analysisResult, setAnalysisResult] = useState<string | null>(null);
   const [activeAction, setActiveAction] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleCapture = (type: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('PROCESSING', `Capturing ${type}...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setCapturedPreview('dummy-screenshot');
       setRobotState('SUCCESS', 'Screenshot Captured');
       setAnalysisResult('Detected UI elements: Windows Application Window, 4 buttons, 2 text fields. No sensitive passwords detected.');
@@ -20,9 +28,10 @@ export const ScreenshotAiView: React.FC = () => {
   };
 
   const handleAction = (actionName: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setActiveAction(actionName);
     setRobotState('THINKING', `Running ${actionName}...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', 'Analysis Complete');
       setAnalysisResult(`Action "${actionName}" executed on screenshot: Extracted high-fidelity semantic comprehension and localized components.`);
     }, 1500);

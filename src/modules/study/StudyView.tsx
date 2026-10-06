@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { GraduationCap, BookOpen, Layers, HelpCircle, CheckCircle, Award } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -27,10 +27,18 @@ export const StudyView: React.FC = () => {
       selected: null as number | null,
     },
   ]);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleGenerate = (type: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('THINKING', `Creating ${type} for ${discipline}...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', `${type} generated!`);
     }, 1000);
   };

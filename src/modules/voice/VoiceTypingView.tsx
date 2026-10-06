@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, Sparkles, Check, Copy, ArrowUpRight } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -12,12 +12,20 @@ export const VoiceTypingView: React.FC = () => {
   const [rawText, setRawText] = useState('hurmatli rektor vergul yangi qator talabalar ilmiy anjumani haqida hisobot taqdim etiladi');
   const [polishedText, setPolishedText] = useState('Hurmatli rektor,\n\nTalabalar ilmiy anjumani haqida hisobot taqdim etiladi.');
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const toggleRecord = () => {
     if (isRecording) {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setIsRecording(false);
       setRobotState('PROCESSING', 'Refining spoken text with AI grammar...');
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setRobotState('SUCCESS', 'Transcription ready');
       }, 1000);
     } else {

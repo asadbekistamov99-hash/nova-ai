@@ -104,6 +104,48 @@ export const Settings: React.FC = () => {
 
             <div>
               <label className="text-xs font-semibold text-slate-200 block mb-1">
+                Google Gemini API Key
+              </label>
+              <input
+                type="password"
+                value={settings.gemini_api_key}
+                onChange={(e) => updateSettings({ gemini_api_key: e.target.value })}
+                placeholder="Get from console.cloud.google.com"
+                className="w-full bg-[#050b1a] text-xs text-white border border-nova-border rounded-xl px-3 py-2 focus:outline-none placeholder-slate-500"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">Get from: https://aistudio.google.com/apikey</p>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-200 block mb-1">
+                OpenAI API Key
+              </label>
+              <input
+                type="password"
+                value={settings.openai_api_key}
+                onChange={(e) => updateSettings({ openai_api_key: e.target.value })}
+                placeholder="Get from platform.openai.com/account/api-keys"
+                className="w-full bg-[#050b1a] text-xs text-white border border-nova-border rounded-xl px-3 py-2 focus:outline-none placeholder-slate-500"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">Get from: https://platform.openai.com/account/api-keys</p>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-200 block mb-1">
+                Anthropic Claude API Key
+              </label>
+              <input
+                type="password"
+                value={settings.claude_api_key}
+                onChange={(e) => updateSettings({ claude_api_key: e.target.value })}
+                placeholder="Get from console.anthropic.com"
+                className="w-full bg-[#050b1a] text-xs text-white border border-nova-border rounded-xl px-3 py-2 focus:outline-none placeholder-slate-500"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">Get from: https://console.anthropic.com/account/keys</p>
+            </div>
+
+            <div>
+              <label className="text-xs font-semibold text-slate-200 block mb-1">
                 Local Ollama Endpoint URL
               </label>
               <input
@@ -116,7 +158,7 @@ export const Settings: React.FC = () => {
 
             <div className="p-3 rounded-xl bg-slate-900/60 border border-nova-border text-xs text-slate-300">
               <span className="font-semibold text-nova-cyan block mb-1">Secret Storage Security</span>
-              API Keys are securely stored and encrypted via Windows Credential Manager DPAPI. No plaintext keys are written to disk.
+              API Keys are stored in browser localStorage. Keep them private and never share publicly.
             </div>
           </div>
         )}

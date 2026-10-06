@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FileText, Upload, Sparkles, Table, FileSearch, CheckCircle2, Bot } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -10,10 +10,18 @@ export const FileAiView: React.FC = () => {
   const [fileAnalysis, setFileAnalysis] = useState<string>(
     '### Executive Summary\n- Total Annual Revenue: $4.2M (+18% YoY)\n- Primary Growth Vector: AI Software Solutions\n- Risk Assessment: Supply chain lead time mitigated\n\n### Key Metrics Table\n| Metric | Q1 | Q2 | Q3 | Q4 |\n|---|---|---|---|---|\n| Gross Margin | 72% | 74% | 75% | 76% |'
   );
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleAction = (actionName: string) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('PROCESSING', `Executing ${actionName} on document...`);
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', `${actionName} finished`);
       setFileAnalysis(`[${actionName} Mode]: Generated comprehensive results for "${selectedFileName}". Preprocessed safely using local PyMuPDF parser.`);
     }, 1200);

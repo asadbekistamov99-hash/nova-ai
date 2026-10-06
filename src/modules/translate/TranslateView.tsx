@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Languages, ArrowRightLeft, Copy, Check, Clipboard } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -12,11 +12,19 @@ export const TranslateView: React.FC = () => {
   const [sourceText, setSourceText] = useState('Artificial intelligence is transforming desktop productivity.');
   const [translatedText, setTranslatedText] = useState('Sun\'iy intellekt ish stoli samaradorligini tubdan o\'zgartirmoqda.');
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleTranslate = () => {
     if (!sourceText.trim()) return;
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('THINKING', 'Translating with stylistic precision...');
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', 'Translation ready');
       if (targetLang === 'ru') {
         setTranslatedText('Искусственный интеллект трансформирует производительность на рабочем столе.');
@@ -39,8 +47,9 @@ export const TranslateView: React.FC = () => {
   };
 
   const handleConvertScript = (direction: 'latin-to-cyrillic' | 'cyrillic-to-latin') => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setRobotState('PROCESSING', 'Converting script...');
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       setRobotState('SUCCESS', 'Script converted');
       if (direction === 'latin-to-cyrillic') {
         setTranslatedText('Сунъий интеллект иш столи самарадорлигини тубдан ўзгартирмоқда.');
