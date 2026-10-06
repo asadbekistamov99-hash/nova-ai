@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "NOVA AI",
+    "tagline": "Your Intelligent Companion",
+    "ready": "Ready",
+    "offline": "Offline Mode",
+    "privateMode": "Private Mode Active"
+  },
+  "modules": {
+    "ask_ai": "Ask AI",
+    "screenshot_ai": "Screenshot AI",
+    "translate": "Translate",
+    "rewrite": "Rewrite",
+    "ocr": "OCR",
+    "clipboard": "Clipboard",
+    "voice_typing": "Voice Typing",
+    "file_ai": "File AI",
+    "study_mode": "Study Mode",
+    "meeting_notes": "Meeting Notes",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "heroTitlePrefix": "Speak or ",
+    "heroTitleHighlight": "choose a task",
+    "heroSubtitle": "I can listen, understand, and help you complete tasks.",
+    "cards": {
+      "languages": {
+        "title": "Languages: Uzbek • English • Russian",
+        "description": "Talk to me in your language. Men sizning tilingizda ham gaplashaman."
+      },
+      "answers": {
+        "title": "Get answers",
+        "description": "Ask anything, from quick facts to in-depth explanations."
+      },
+      "productive": {
+        "title": "Be more productive",
+        "description": "Summarize, rewrite, translate, extract text and more."
+      },
+      "smarter": {
+        "title": "Work smarter",
+        "description": "Use the tools on the left or just tell me what you need."
+      }
+    }
+  },
+  "commandBar": {
+    "placeholder": "Give a command...",
+    "listening": "Listening...",
+    "run": "Run",
+    "stop": "Stop",
+    "routingTo": "Routing to {{module}}...",
+    "examples": "Try: 'Translate this to Russian' or 'Summarize this PDF'"
+  },
+  "robot": {
+    "states": {
+      "idle": "Standing by",
+      "listening": "Listening to your voice...",
+      "thinking": "Analyzing request...",
+      "speaking": "Responding...",
+      "processing": "Executing command...",
+      "success": "Task completed successfully",
+      "error": "Error processing command"
+    }
+  },
+  "settings": {
+    "title": "System Settings",
+    "tabs": {
+      "general": "General",
+      "models": "AI Models",
+      "voice": "Voice & Audio",
+      "languages": "Languages",
+      "shortcuts": "Shortcuts",
+      "privacy": "Privacy & Security",
+      "about": "About NOVA"
+    },
+    "providerLabel": "Active AI Engine",
+    "privacyToggle": "Enable Strict Local Privacy Mode",
+    "privacyHint": "In Privacy Mode, all cloud AI calls are disabled. Only local Ollama models and local OCR run.",
+    "shortcutsLabel": "Global Hotkey",
+    "shortcutsValue": "Ctrl + Space",
+    "save": "Save Changes"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "app": {
+    "name": "NOVA AI",
+    "tagline": "Sizning aqlli yordamchingiz",
+    "ready": "Tayyor",
+    "offline": "Oflayn rejim",
+    "privateMode": "Maxfiy rejim faol"
+  },
+  "modules": {
+    "ask_ai": "Ask AI",
+    "screenshot_ai": "Screenshot AI",
+    "translate": "Tarjima",
+    "rewrite": "Qayta yozish",
+    "ocr": "OCR (Matnni ajratish)",
+    "clipboard": "Xotira buferi",
+    "voice_typing": "Ovozli kiritish",
+    "file_ai": "Fayl AI",
+    "study_mode": "O'qish rejimi",
+    "meeting_notes": "Uchrashuv qaydlari",
+    "settings": "Sozlamalar"
+  },
+  "dashboard": {
+    "heroTitlePrefix": "Gapiring yoki ",
+    "heroTitleHighlight": "vazifani tanlang",
+    "heroSubtitle": "Men tinglayman, tushunaman va vazifalaringizni bajarishda yordam beraman.",
+    "cards": {
+      "languages": {
+        "title": "Tillar: O'zbek • Ingliz • Rus",
+        "description": "Menga o'z tilingizda gapiring. Men sizning tilingizda ham gaplashaman."
+      },
+      "answers": {
+        "title": "Javoblar oling",
+        "description": "Tezkor faktlardan tortib chuqur tushuntirishlargacha istalgan narsani so'rang."
+      },
+      "productive": {
+        "title": "Samaradorlikni oshiring",
+        "description": "Xulosalang, qayta yozing, tarjima qiling, matn ajrating va boshqalar."
+      },
+      "smarter": {
+        "title": "Aqlliroq ishlang",
+        "description": "Chapdagi vositalardan foydalaning yoki menga nima kerakligini ayting."
+      }
+    }
+  },
+  "commandBar": {
+    "placeholder": "Buyruq bering...",
+    "listening": "Tinglanmoqda...",
+    "run": "Bajarish",
+    "stop": "To'xtatish",
+    "routingTo": "{{module}} moduliga yo'naltirilmoqda...",
+    "examples": "Masalan: 'Buni ruschaga tarjima qil' yoki 'PDF faylni xulosala'"
+  },
+  "robot": {
+    "states": {
+      "idle": "Kutilmoqda",
+      "listening": "Ovozingiz tinglanmoqda...",
+      "thinking": "So'rov tahlil qilinmoqda...",
+      "speaking": "Javob berilmoqda...",
+      "processing": "Buyruq bajarilmoqda...",
+      "success": "Vazifa muvaffaqiyatli yakunlandi",
+      "error": "Buyruqni bajarishda xatolik"
+    }
+  },
+  "settings": {
+    "title": "Tizim sozlamalari",
+    "tabs": {
+      "general": "Umumiy",
+      "models": "AI Modellari",
+      "voice": "Ovoz va audio",
+      "languages": "Tillar",
+      "shortcuts": "Tezkor tugmalar",
+      "privacy": "Maxfiylik va xavfsizlik",
+      "about": "NOVA haqida"
+    },
+    "providerLabel": "Faol AI vositasi",
+    "privacyToggle": "Qat'iy mahalliy maxfiylik rejimini yoqish",
+    "privacyHint": "Maxfiy rejimda bulutli AI qo'ng'iroqlari o'chiriladi. Faqat mahalliy Ollama va lokal OCR ishlaydi.",
+    "shortcutsLabel": "Global chaqiruv tugmasi",
+    "shortcutsValue": "Ctrl + Space",
+    "save": "O'zgarishlarni saqlash"
+  }
+}
