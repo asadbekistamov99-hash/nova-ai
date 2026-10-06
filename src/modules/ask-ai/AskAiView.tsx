@@ -1,32 +1,39 @@
-import React, { useState } from 'react';
-import { Send, Bot, User, Sparkles, Copy, Check, RotateCcw } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Send, Bot, User, Sparkles, Copy, Check, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
+import { useSettings } from '../../stores/useSettingsStore';
+import { createAIProvider } from '../../services/aiProviders';
 
 interface Message {
   id: string;
   sender: 'user' | 'assistant';
   text: string;
   timestamp: string;
+  error?: string;
 }
 
 export const AskAiView: React.FC = () => {
   const { t } = useLanguage();
   const { setRobotState } = useRobot();
+  const { settings } = useSettings();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
       sender: 'assistant',
       text: 'Greetings! I am NOVA AI. How may I assist your workflow today?',
-      timestamp: '12:00 PM',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     },
   ]);
   const [inputText, setInputText] = useState('');
-  const [selectedModel, setSelectedModel] = useState('Gemini 2.5 Flash');
+  const [selectedModel, setSelectedModel] = useState('gemini-2.0-flash');
+  const [selectedProvider, setSelectedProvider] = useState<'gemini' | 'openai' | 'claude' | 'ollama'>('gemini');
   const [isCopied, setIsCopied] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  const handleSend = () => {
-    if (!inputText.trim()) return;
+  const handleSend = async () => {
+    if (!inputText.trim() || isLoading) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
@@ -38,18 +45,51 @@ export const AskAiView: React.FC = () => {
     setMessages((prev) => [...prev, userMsg]);
     setInputText('');
     setRobotState('THINKING');
+    setIsLoading(true);
+    abortControllerRef.current = new AbortController();
 
-    setTimeout(() => {
+    try {
+      const provider = createAIProvider({
+        type: selectedProvider,
+        model: selectedModel,
+        apiKey: (settings as any)[`${selectedProvider}_api_key`],
+        endpoint: selectedProvider === 'ollama' ? settings.localOllamaUrl : undefined,
+      });
+
+      const response = await provider.sendMessage([
+        ...messages.map((m) => ({
+          role: m.sender as 'user' | 'assistant',
+          content: m.text,
+        })),
+        { role: 'user', content: userMsg.text },
+      ]);
+
       setRobotState('SPEAKING');
       const aiReply: Message = {
         id: (Date.now() + 1).toString(),
         sender: 'assistant',
-        text: "Here is the comprehensive response to your query: \"" + userMsg.text + "\".\n\n```python\n# Simulated code example\ndef nova_solve(task: str) -> str:\n    return f\"Task '{task}' processed with highest precision.\"\n```\n\nAll parameters optimized successfully.",
+        text: response.text,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
+
       setMessages((prev) => [...prev, aiReply]);
+      setRobotState('SUCCESS');
+      setTimeout(() => setRobotState('IDLE'), 1500);
+    } catch (error) {
+      setRobotState('ERROR');
+      const errorMsg: Message = {
+        id: (Date.now() + 2).toString(),
+        sender: 'assistant',
+        text: `Error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        error: 'true',
+      };
+      setMessages((prev) => [...prev, errorMsg]);
       setTimeout(() => setRobotState('IDLE'), 2000);
-    }, 1000);
+    } finally {
+      setIsLoading(false);
+      abortControllerRef.current = null;
+    }
   };
 
   const handleCopy = (id: string, text: string) => {
@@ -60,7 +100,7 @@ export const AskAiView: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col h-[calc(100vh-8.5rem)] px-6 py-2 select-text">
-      {/* Top Header & Model Selector */}
+      {/* Top Header & Provider/Model Selector */}
       <div className="flex items-center justify-between pb-3 border-b border-nova-border/50">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-nova-cyan" />
@@ -68,16 +108,50 @@ export const AskAiView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <span className="text-xs text-slate-400">Provider:</span>
+          <select
+            value={selectedProvider}
+            onChange={(e) => setSelectedProvider(e.target.value as any)}
+            className="bg-[#091530] text-xs text-nova-cyan border border-nova-border rounded-lg px-2.5 py-1 focus:outline-none focus:border-nova-cyan"
+          >
+            <option value="gemini">Gemini</option>
+            <option value="openai">OpenAI</option>
+            <option value="claude">Claude</option>
+            <option value="ollama">Ollama (Local)</option>
+          </select>
+
           <span className="text-xs text-slate-400">Model:</span>
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
             className="bg-[#091530] text-xs text-nova-cyan border border-nova-border rounded-lg px-2.5 py-1 focus:outline-none focus:border-nova-cyan"
           >
-            <option>Gemini 2.5 Flash</option>
-            <option>GPT-4o</option>
-            <option>Claude 3.5 Sonnet</option>
-            <option>Ollama (Llama 3 Local)</option>
+            {selectedProvider === 'gemini' && (
+              <>
+                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                <option value="gemini-2.0-pro">Gemini 2.0 Pro</option>
+              </>
+            )}
+            {selectedProvider === 'openai' && (
+              <>
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+              </>
+            )}
+            {selectedProvider === 'claude' && (
+              <>
+                <option value="claude-3-5-sonnet-20241022">Claude 3.5 Sonnet</option>
+                <option value="claude-3-opus-20250219">Claude 3 Opus</option>
+              </>
+            )}
+            {selectedProvider === 'ollama' && (
+              <>
+                <option value="llama3">Llama 3</option>
+                <option value="qwen2.5">Qwen 2.5</option>
+                <option value="mistral">Mistral</option>
+              </>
+            )}
           </select>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CustomTitlebar } from './components/titlebar/CustomTitlebar';
 import { Sidebar } from './components/sidebar/Sidebar';
 import { NovaRobot } from './components/robot/NovaRobot';
@@ -16,9 +16,35 @@ import { FileAiView } from './modules/file-ai/FileAiView';
 import { StudyView } from './modules/study/StudyView';
 import { MeetingNotesView } from './modules/meeting/MeetingNotesView';
 import { useNavigation } from './stores/useNavigationStore';
+import { updateSettings } from './stores/useSettingsStore';
 
 export const App: React.FC = () => {
-  const { activeModule } = useNavigation();
+  const { activeModule, navigateTo } = useNavigation();
+
+  // Setup Electron IPC listeners for global shortcuts and tray actions
+  useEffect(() => {
+    const api = (window as any).electronAPI;
+    if (api?.onGlobalShortcut) {
+      api.onGlobalShortcut((shortcut: string) => {
+        switch (shortcut) {
+          case 'screenshot':
+            navigateTo('screenshot_ai');
+            break;
+          case 'voice':
+            navigateTo('voice_typing');
+            break;
+          case 'clipboard':
+            navigateTo('clipboard');
+            break;
+          case 'settings':
+            navigateTo('settings');
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }, [navigateTo]);
 
   const renderActiveContent = () => {
     switch (activeModule) {

@@ -131,21 +131,27 @@ function createWindow() {
   });
 }
 
-// IPC Window Controls
+// IPC Window Controls (fixed handlers)
 ipcMain.on('window-minimize', () => {
-  mainWindow?.minimize();
+  if (mainWindow) {
+    mainWindow.minimize();
+  }
 });
 
 ipcMain.on('window-maximize', () => {
-  if (mainWindow?.isMaximized()) {
-    mainWindow.unmaximize();
-  } else {
-    mainWindow?.maximize();
+  if (mainWindow) {
+    if (mainWindow.isMaximized()) {
+      mainWindow.unmaximize();
+    } else {
+      mainWindow.maximize();
+    }
   }
 });
 
 ipcMain.on('window-close', () => {
-  mainWindow?.hide();
+  if (mainWindow) {
+    mainWindow.hide();
+  }
 });
 
 app.whenReady().then(() => {
