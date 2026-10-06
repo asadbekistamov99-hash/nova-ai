@@ -8,62 +8,62 @@ export const NovaRobot: React.FC = () => {
   const { t } = useLanguage();
 
   // Waveform bars count and heights
-  const leftWaveforms = useMemo(() => [14, 28, 42, 60, 36, 18], []);
-  const rightWaveforms = useMemo(() => [18, 36, 60, 42, 28, 14], []);
+  const leftWaveforms = useMemo(() => [16, 28, 40, 52, 64, 52, 40, 28, 16], []);
+  const rightWaveforms = useMemo(() => [16, 28, 40, 52, 64, 52, 40, 28, 16], []);
 
   // Determine state-based color styling
   const stateTheme = useMemo(() => {
     switch (robotState) {
       case 'LISTENING':
         return {
-          glow: 'rgba(0, 229, 255, 0.6)',
+          glow: 'rgba(0, 229, 255, 0.8)',
           border: 'border-nova-cyan',
-          halo: 'from-cyan-500/25 via-blue-600/15 to-transparent',
+          halo: 'from-cyan-500/40 via-blue-600/20 to-transparent',
           eyeColor: '#00e5ff',
           statusText: 'Listening...',
           badgeClass: 'bg-cyan-950/70 border-cyan-500/50 text-cyan-300',
         };
       case 'THINKING':
         return {
-          glow: 'rgba(147, 51, 234, 0.6)',
+          glow: 'rgba(147, 51, 234, 0.7)',
           border: 'border-purple-400',
-          halo: 'from-purple-500/30 via-indigo-600/20 to-transparent',
+          halo: 'from-purple-500/40 via-indigo-600/25 to-transparent',
           eyeColor: '#c084fc',
           statusText: 'Thinking...',
           badgeClass: 'bg-purple-950/70 border-purple-500/50 text-purple-300',
         };
       case 'SPEAKING':
         return {
-          glow: 'rgba(56, 189, 248, 0.7)',
+          glow: 'rgba(56, 189, 248, 0.8)',
           border: 'border-sky-400',
-          halo: 'from-sky-500/30 via-cyan-600/20 to-transparent',
+          halo: 'from-sky-500/40 via-cyan-600/25 to-transparent',
           eyeColor: '#38bdf8',
           statusText: 'Speaking...',
           badgeClass: 'bg-sky-950/70 border-sky-500/50 text-sky-300',
         };
       case 'PROCESSING':
         return {
-          glow: 'rgba(0, 162, 255, 0.6)',
+          glow: 'rgba(0, 162, 255, 0.7)',
           border: 'border-blue-400',
-          halo: 'from-blue-500/25 via-indigo-600/15 to-transparent',
+          halo: 'from-blue-500/35 via-indigo-600/20 to-transparent',
           eyeColor: '#60a5fa',
           statusText: 'Processing...',
           badgeClass: 'bg-blue-950/70 border-blue-500/50 text-blue-300',
         };
       case 'SUCCESS':
         return {
-          glow: 'rgba(16, 185, 129, 0.6)',
+          glow: 'rgba(16, 185, 129, 0.7)',
           border: 'border-emerald-400',
-          halo: 'from-emerald-500/30 via-teal-600/15 to-transparent',
+          halo: 'from-emerald-500/40 via-teal-600/20 to-transparent',
           eyeColor: '#34d399',
           statusText: 'Completed',
           badgeClass: 'bg-emerald-950/70 border-emerald-500/50 text-emerald-300',
         };
       case 'ERROR':
         return {
-          glow: 'rgba(239, 68, 68, 0.6)',
+          glow: 'rgba(239, 68, 68, 0.7)',
           border: 'border-red-400',
-          halo: 'from-red-500/30 via-rose-600/15 to-transparent',
+          halo: 'from-red-500/40 via-rose-600/20 to-transparent',
           eyeColor: '#f87171',
           statusText: 'Error',
           badgeClass: 'bg-red-950/70 border-red-500/50 text-red-300',
@@ -71,9 +71,9 @@ export const NovaRobot: React.FC = () => {
       case 'IDLE':
       default:
         return {
-          glow: 'rgba(0, 180, 255, 0.35)',
+          glow: 'rgba(0, 180, 255, 0.5)',
           border: 'border-cyan-500/40',
-          halo: 'from-blue-600/20 via-cyan-500/10 to-transparent',
+          halo: 'from-blue-600/25 via-cyan-500/15 to-transparent',
           eyeColor: '#38bdf8',
           statusText: 'Standing by',
           badgeClass: 'bg-slate-900/60 border-slate-700/50 text-slate-300',
@@ -85,247 +85,235 @@ export const NovaRobot: React.FC = () => {
     <div className="relative w-full h-full flex flex-col items-center justify-center p-4 select-none">
       {/* Background radial ambient halo */}
       <div
-        className={`absolute inset-0 rounded-full bg-gradient-to-b ${stateTheme.halo} blur-3xl pointer-events-none transition-all duration-700 opacity-80`}
+        className={`absolute inset-0 rounded-full bg-gradient-to-b ${stateTheme.halo} blur-3xl pointer-events-none transition-all duration-700 opacity-90`}
       ></div>
 
       {/* Main Character Stage with Audio Waveforms */}
-      <div className="relative flex items-center justify-center gap-6 w-full max-w-md">
-        {/* Left Audio Waveform Bars (Active on LISTENING or SPEAKING) */}
-        <div className="flex items-center gap-1.5 h-32 px-2">
+      <div className="relative flex items-center justify-center gap-8 w-full max-w-2xl">
+        {/* Left Audio Waveform Bars */}
+        <div className="flex items-end gap-1 h-40 px-3">
           {leftWaveforms.map((h, idx) => {
             const isWaveActive = robotState === 'LISTENING' || robotState === 'SPEAKING';
             return (
               <div
                 key={`left-wave-${idx}`}
-                className="w-1.5 rounded-full bg-gradient-to-t from-nova-blue to-nova-cyan transition-all duration-300"
+                className="w-2 rounded-full bg-gradient-to-t from-nova-blue via-nova-cyan to-cyan-300 transition-all duration-300 shadow-lg"
                 style={{
-                  height: isWaveActive ? `${Math.max(12, h * (idx % 2 === 0 ? 1.2 : 0.8))}px` : '10px',
-                  opacity: isWaveActive ? 0.9 : 0.25,
-                  animation: isWaveActive ? `soundwave 0.8s ease-in-out infinite ${idx * 0.15}s` : 'none',
+                  height: isWaveActive ? `${Math.max(10, h * (0.7 + Math.sin(idx) * 0.3))}px` : '8px',
+                  opacity: isWaveActive ? 0.95 : 0.3,
+                  animation: isWaveActive ? `soundwave 0.6s ease-in-out infinite ${idx * 0.1}s` : 'none',
+                  boxShadow: isWaveActive ? `0 0 8px rgba(0, 229, 255, 0.6)` : 'none',
                 }}
               />
             );
           })}
         </div>
 
-        {/* Vector Robot Head & Bust */}
+        {/* Advanced Robot with Hands and Better Proportions */}
         <div className="relative flex flex-col items-center group cursor-pointer" onClick={() => {
-          // Cycle through states on click for interactive testing
           const states: RobotState[] = ['IDLE', 'LISTENING', 'THINKING', 'SPEAKING', 'PROCESSING', 'SUCCESS', 'ERROR'];
           const nextIndex = (states.indexOf(robotState) + 1) % states.length;
           setRobotState(states[nextIndex]);
         }}>
           {/* Subtle floating animation wrapper */}
           <div className="relative animate-float flex flex-col items-center">
-            {/* Holographic Ring / Particle effect above head */}
+            {/* Top Glow Ring */}
             <div
-              className={`w-32 h-6 -mb-3 rounded-full border border-cyan-400/40 bg-cyan-400/10 blur-[1px] ${
+              className={`w-36 h-8 -mb-4 rounded-full border-2 border-cyan-400/50 bg-gradient-to-b from-cyan-400/20 to-transparent blur-sm ${
                 robotState === 'THINKING' ? 'animate-spin' : 'animate-pulse'
               }`}
             ></div>
 
-            {/* Robot SVG Graphics */}
+            {/* Advanced Robot SVG Graphics */}
             <svg
-              className="w-64 h-64 drop-shadow-[0_0_35px_rgba(0,229,255,0.4)] transition-transform duration-300 group-hover:scale-105"
-              viewBox="0 0 240 240"
+              className="w-72 h-80 drop-shadow-[0_0_50px_rgba(0,229,255,0.5)] transition-transform duration-300 group-hover:scale-105"
+              viewBox="0 0 280 340"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              {/* Defs for gradients & glows */}
               <defs>
-                <linearGradient id="armorWhite" x1="0%" y1="0%" x2="100%" y2="100%">
+                {/* Gradients */}
+                <linearGradient id="metalWhite" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor="#ffffff" />
-                  <stop offset="60%" stopColor="#e2e8f0" />
-                  <stop offset="100%" stopColor="#94a3b8" />
+                  <stop offset="50%" stopColor="#f0f4f8" />
+                  <stop offset="100%" stopColor="#cbd5e1" />
                 </linearGradient>
-                <linearGradient id="helmetVisor" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#080f24" />
-                  <stop offset="70%" stopColor="#030712" />
-                  <stop offset="100%" stopColor="#02040a" />
+                <linearGradient id="darkVisor" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#0a1929" />
+                  <stop offset="70%" stopColor="#020409" />
+                  <stop offset="100%" stopColor="#000000" />
                 </linearGradient>
-                <linearGradient id="cyanCore" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#00e5ff" />
-                  <stop offset="100%" stopColor="#0077ff" />
+                <linearGradient id="cyanNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#00f0ff" />
+                  <stop offset="100%" stopColor="#0090ff" />
                 </linearGradient>
-                <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
+                <filter id="superGlow" x="-30%" y="-30%" width="160%" height="160%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
                   <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="innerGlow" x="-15%" y="-15%" width="130%" height="130%">
+                  <feGaussianBlur stdDeviation="2" result="blur" />
                 </filter>
               </defs>
 
-              {/* Headphone Ears / Left & Right Audio Rings */}
-              <g id="Headphones">
-                {/* Left Headphone Ring */}
-                <circle cx="50" cy="95" r="18" fill="url(#armorWhite)" stroke="#00e5ff" strokeWidth="2.5" />
-                <circle cx="50" cy="95" r="11" fill="#0b1736" stroke="#00e5ff" strokeWidth="2" filter="url(#neonGlow)" />
-                <circle cx="50" cy="95" r="5" fill="#00e5ff" />
-
-                {/* Right Headphone Ring */}
-                <circle cx="190" cy="95" r="18" fill="url(#armorWhite)" stroke="#00e5ff" strokeWidth="2.5" />
-                <circle cx="190" cy="95" r="11" fill="#0b1736" stroke="#00e5ff" strokeWidth="2" filter="url(#neonGlow)" />
-                <circle cx="190" cy="95" r="5" fill="#00e5ff" />
-
-                {/* Headphone Arch Bridge */}
-                <path
-                  d="M52 82 C55 35, 185 35, 188 82"
-                  stroke="url(#armorWhite)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                />
-                <path
-                  d="M58 80 C60 42, 180 42, 182 80"
-                  stroke="#00e5ff"
-                  strokeWidth="2"
-                  strokeDasharray="4 3"
-                />
+              {/* Left Arm with Hand */}
+              <g id="LeftArm">
+                <rect x="20" y="140" width="24" height="70" rx="12" fill="url(#metalWhite)" stroke="#cbd5e1" strokeWidth="2" />
+                <circle cx="32" cy="215" r="18" fill="url(#metalWhite)" stroke="#cbd5e1" strokeWidth="2" />
+                {/* Hand fingers glow */}
+                <circle cx="16" cy="220" r="6" fill="#00e5ff" opacity="0.8" />
+                <circle cx="32" cy="235" r="6" fill="#00e5ff" opacity="0.8" />
+                <circle cx="48" cy="220" r="6" fill="#00e5ff" opacity="0.8" />
               </g>
 
-              {/* Head Shell */}
-              <rect
-                x="62"
-                y="52"
-                width="116"
-                height="94"
-                rx="47"
-                fill="url(#armorWhite)"
-                stroke="#cbd5e1"
-                strokeWidth="1.5"
-              />
+              {/* Right Arm with Hand */}
+              <g id="RightArm">
+                <rect x="236" y="140" width="24" height="70" rx="12" fill="url(#metalWhite)" stroke="#cbd5e1" strokeWidth="2" />
+                <circle cx="248" cy="215" r="18" fill="url(#metalWhite)" stroke="#cbd5e1" strokeWidth="2" />
+                {/* Hand fingers glow */}
+                <circle cx="232" cy="220" r="6" fill="#00e5ff" opacity="0.8" />
+                <circle cx="248" cy="235" r="6" fill="#00e5ff" opacity="0.8" />
+                <circle cx="264" cy="220" r="6" fill="#00e5ff" opacity="0.8" />
+              </g>
 
-              {/* Glossy Black Visor Face */}
-              <rect
-                x="72"
-                y="62"
-                width="96"
-                height="74"
-                rx="37"
-                fill="url(#helmetVisor)"
-                stroke="#1e293b"
+              {/* Upper Body / Torso */}
+              <path
+                d="M 60 180 L 50 260 C 50 270, 230 270, 230 260 L 220 180 Z"
+                fill="url(#metalWhite)"
+                stroke="#cbd5e1"
                 strokeWidth="2"
               />
 
-              {/* Expressive Glowing Visor Eyes */}
-              <g id="VisorEyes" filter="url(#neonGlow)">
+              {/* Neck */}
+              <rect x="120" y="155" width="40" height="28" rx="8" fill="#334155" stroke="#1e293b" strokeWidth="1.5" />
+
+              {/* Left Earpiece / Headphone */}
+              <g id="LeftEar">
+                <circle cx="50" cy="100" r="22" fill="url(#metalWhite)" stroke="#00e5ff" strokeWidth="2.5" />
+                <circle cx="50" cy="100" r="14" fill="#0b1736" stroke="#00e5ff" strokeWidth="2" filter="url(#superGlow)" />
+                <circle cx="50" cy="100" r="7" fill="#00e5ff" opacity="0.9" />
+              </g>
+
+              {/* Right Earpiece / Headphone */}
+              <g id="RightEar">
+                <circle cx="230" cy="100" r="22" fill="url(#metalWhite)" stroke="#00e5ff" strokeWidth="2.5" />
+                <circle cx="230" cy="100" r="14" fill="#0b1736" stroke="#00e5ff" strokeWidth="2" filter="url(#superGlow)" />
+                <circle cx="230" cy="100" r="7" fill="#00e5ff" opacity="0.9" />
+              </g>
+
+              {/* Headphone Bridge */}
+              <path
+                d="M 65 85 C 70 35, 210 35, 215 85"
+                stroke="url(#metalWhite)"
+                strokeWidth="10"
+                strokeLinecap="round"
+              />
+              <path
+                d="M 68 83 C 72 40, 208 40, 212 83"
+                stroke="#00e5ff"
+                strokeWidth="2.5"
+                strokeDasharray="5 4"
+                opacity="0.8"
+              />
+
+              {/* Large Head */}
+              <rect
+                x="70"
+                y="60"
+                width="140"
+                height="130"
+                rx="50"
+                fill="url(#metalWhite)"
+                stroke="#cbd5e1"
+                strokeWidth="2"
+              />
+
+              {/* Glossy Visor Face - Full Screen */}
+              <rect
+                x="82"
+                y="75"
+                width="116"
+                height="100"
+                rx="40"
+                fill="url(#darkVisor)"
+                stroke="#1e293b"
+                strokeWidth="2.5"
+              />
+
+              {/* Visor Glass Shine */}
+              <ellipse
+                cx="100"
+                cy="85"
+                rx="30"
+                ry="20"
+                fill="#ffffff"
+                opacity="0.15"
+              />
+
+              {/* Expressive LED Eyes - Larger */}
+              <g id="Eyes" filter="url(#superGlow)">
                 {robotState === 'SUCCESS' ? (
-                  // Happy upward curved eyes (^ ^)
                   <>
-                    <path
-                      d="M88 95 Q98 83 108 95"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M132 95 Q142 83 152 95"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
+                    {/* Happy smile eyes */}
+                    <path d="M 95 110 Q 108 95 120 110" stroke={stateTheme.eyeColor} strokeWidth="5" strokeLinecap="round" fill="none" />
+                    <path d="M 160 110 Q 173 95 185 110" stroke={stateTheme.eyeColor} strokeWidth="5" strokeLinecap="round" fill="none" />
                   </>
                 ) : robotState === 'ERROR' ? (
-                  // Serious / alert eyes (> <)
                   <>
-                    <path
-                      d="M88 88 L106 98 L88 106"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M152 88 L134 98 L152 106"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
+                    {/* Alert/angry eyes */}
+                    <path d="M 95 105 L 120 120 L 95 130" stroke={stateTheme.eyeColor} strokeWidth="5" strokeLinecap="round" fill="none" />
+                    <path d="M 185 105 L 160 120 L 185 130" stroke={stateTheme.eyeColor} strokeWidth="5" strokeLinecap="round" fill="none" />
                   </>
                 ) : robotState === 'THINKING' ? (
-                  // Rotating loading pupils
                   <>
-                    <circle cx="98" cy="96" r="8" stroke={stateTheme.eyeColor} strokeWidth="3" strokeDasharray="12 6" />
-                    <circle cx="142" cy="96" r="8" stroke={stateTheme.eyeColor} strokeWidth="3" strokeDasharray="12 6" />
+                    {/* Thinking - rotating pupils */}
+                    <circle cx="108" cy="118" r="10" stroke={stateTheme.eyeColor} strokeWidth="3.5" strokeDasharray="14 8" fill="none" />
+                    <circle cx="172" cy="118" r="10" stroke={stateTheme.eyeColor} strokeWidth="3.5" strokeDasharray="14 8" fill="none" />
                   </>
                 ) : (
-                  // Friendly default smiling arc eyes (mockup style)
                   <>
-                    <path
-                      d="M88 96 C92 86, 104 86, 108 96"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
-                    <path
-                      d="M132 96 C136 86, 148 86, 152 96"
-                      stroke={stateTheme.eyeColor}
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      fill="none"
-                    />
+                    {/* Default friendly eyes - Larger circles */}
+                    <circle cx="108" cy="115" r="12" fill={stateTheme.eyeColor} opacity="0.95" />
+                    <circle cx="172" cy="115" r="12" fill={stateTheme.eyeColor} opacity="0.95" />
+                    {/* Pupils */}
+                    <circle cx="108" cy="115" r="6" fill="#000000" />
+                    <circle cx="172" cy="115" r="6" fill="#000000" />
                   </>
                 )}
 
-                {/* Mouth / Audio LED Bar */}
+                {/* LED Mouth / Audio Indicator */}
                 {robotState === 'SPEAKING' ? (
-                  <path
-                    d="M112 118 Q120 126 128 118"
-                    stroke={stateTheme.eyeColor}
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    fill="none"
-                  />
+                  <path d="M 120 145 Q 140 160 160 145" stroke={stateTheme.eyeColor} strokeWidth="4" strokeLinecap="round" fill="none" />
                 ) : (
-                  <line
-                    x1="115"
-                    y1="118"
-                    x2="125"
-                    y2="118"
-                    stroke={stateTheme.eyeColor}
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    opacity="0.7"
-                  />
+                  <line x1="125" y1="145" x2="155" y2="145" stroke={stateTheme.eyeColor} strokeWidth="2.5" strokeLinecap="round" opacity="0.7" />
                 )}
               </g>
 
-              {/* Neck & Armor Collar */}
-              <path
-                d="M102 144 L102 156 L138 156 L138 144"
-                fill="#334155"
-              />
-
-              {/* Chestplate Armor */}
-              <path
-                d="M70 162 C70 156, 170 156, 170 162 L185 220 C185 228, 55 228, 55 220 Z"
-                fill="url(#armorWhite)"
-                stroke="#cbd5e1"
-                strokeWidth="1.5"
-              />
-
-              {/* Center Glowing Arc Reactor / Energy Core */}
-              <circle cx="120" cy="186" r="14" fill="#08142f" stroke="#00e5ff" strokeWidth="2.5" />
+              {/* Central Energy Core / Arc Reactor */}
+              <circle cx="140" cy="265" r="18" fill="#08142f" stroke="#00e5ff" strokeWidth="3" />
               <circle
-                cx="120"
-                cy="186"
-                r="8"
-                fill="url(#cyanCore)"
-                filter="url(#neonGlow)"
-                className={robotState === 'LISTENING' ? 'animate-ping' : ''}
+                cx="140"
+                cy="265"
+                r="11"
+                fill="url(#cyanNeon)"
+                filter="url(#superGlow)"
+                className={robotState === 'LISTENING' || robotState === 'SPEAKING' ? 'animate-pulse' : 'animate-pulse'}
               />
-              <circle cx="120" cy="186" r="3" fill="#ffffff" />
+              <circle cx="140" cy="265" r="4" fill="#ffffff" opacity="0.9" />
 
-              {/* NOVA AI Brand Text on Chestplate */}
+              {/* Side Power Lines */}
+              <line x1="70" y1="200" x2="55" y2="200" stroke="#00e5ff" strokeWidth="2" opacity="0.6" />
+              <line x1="210" y1="200" x2="225" y2="200" stroke="#00e5ff" strokeWidth="2" opacity="0.6" />
+
+              {/* NOVA AI Branding */}
               <text
-                x="120"
-                y="212"
+                x="140"
+                y="310"
                 textAnchor="middle"
                 fill="#475569"
-                fontSize="8.5"
-                fontWeight="700"
-                letterSpacing="1.5"
+                fontSize="10"
+                fontWeight="800"
+                letterSpacing="2"
                 fontFamily="sans-serif"
               >
                 NOVA AI
@@ -335,17 +323,18 @@ export const NovaRobot: React.FC = () => {
         </div>
 
         {/* Right Audio Waveform Bars */}
-        <div className="flex items-center gap-1.5 h-32 px-2">
+        <div className="flex items-end gap-1 h-40 px-3">
           {rightWaveforms.map((h, idx) => {
             const isWaveActive = robotState === 'LISTENING' || robotState === 'SPEAKING';
             return (
               <div
                 key={`right-wave-${idx}`}
-                className="w-1.5 rounded-full bg-gradient-to-t from-nova-cyan to-nova-blue transition-all duration-300"
+                className="w-2 rounded-full bg-gradient-to-t from-nova-cyan via-nova-blue to-cyan-300 transition-all duration-300 shadow-lg"
                 style={{
-                  height: isWaveActive ? `${Math.max(12, h * (idx % 2 === 0 ? 0.9 : 1.3))}px` : '10px',
-                  opacity: isWaveActive ? 0.9 : 0.25,
-                  animation: isWaveActive ? `soundwave 0.9s ease-in-out infinite ${idx * 0.12}s` : 'none',
+                  height: isWaveActive ? `${Math.max(10, h * (0.7 + Math.sin(idx) * 0.3))}px` : '8px',
+                  opacity: isWaveActive ? 0.95 : 0.3,
+                  animation: isWaveActive ? `soundwave 0.6s ease-in-out infinite ${idx * 0.1}s` : 'none',
+                  boxShadow: isWaveActive ? `0 0 8px rgba(0, 229, 255, 0.6)` : 'none',
                 }}
               />
             );
@@ -353,25 +342,37 @@ export const NovaRobot: React.FC = () => {
         </div>
       </div>
 
-      {/* State status badge & prompt helper */}
-      <div className="mt-4 flex flex-col items-center gap-1.5">
+      {/* State status badge */}
+      <div className="mt-6 flex flex-col items-center gap-2">
         <div
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-medium backdrop-blur-md transition-all duration-300 shadow-sm ${stateTheme.badgeClass}`}
+          className={`flex items-center gap-2 px-4 py-2 rounded-full border text-sm font-medium backdrop-blur-md transition-all duration-300 shadow-lg ${stateTheme.badgeClass}`}
         >
-          {robotState === 'LISTENING' && <Mic className="w-3.5 h-3.5 animate-pulse text-cyan-400" />}
-          {robotState === 'THINKING' && <Sparkles className="w-3.5 h-3.5 animate-spin text-purple-400" />}
-          {robotState === 'PROCESSING' && <Loader2 className="w-3.5 h-3.5 animate-spin text-blue-400" />}
-          {robotState === 'SPEAKING' && <Volume2 className="w-3.5 h-3.5 animate-bounce text-sky-400" />}
-          {robotState === 'SUCCESS' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />}
-          {robotState === 'ERROR' && <AlertCircle className="w-3.5 h-3.5 text-red-400" />}
-          <span>{customMessage || t(`robot.states.${robotState.toLowerCase()}`) || stateTheme.statusText}</span>
+          {robotState === 'LISTENING' && <Mic className="w-4 h-4 animate-pulse text-cyan-400" />}
+          {robotState === 'THINKING' && <Sparkles className="w-4 h-4 animate-spin text-purple-400" />}
+          {robotState === 'PROCESSING' && <Loader2 className="w-4 h-4 animate-spin text-blue-400" />}
+          {robotState === 'SPEAKING' && <Volume2 className="w-4 h-4 animate-bounce text-sky-400" />}
+          {robotState === 'SUCCESS' && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+          {robotState === 'ERROR' && <AlertCircle className="w-4 h-4 text-red-400" />}
+          <span>{customMessage || stateTheme.statusText}</span>
         </div>
 
-        {/* Small hint on interactive state cycling */}
-        <span className="text-[10px] text-slate-500 font-mono tracking-tight">
-          Click robot to cycle states ({robotState})
+        <span className="text-xs text-slate-400 font-mono tracking-tight">
+          Click robot to cycle states
         </span>
       </div>
+
+      {/* Animation keyframes */}
+      <style>{`
+        @keyframes soundwave {
+          0%, 100% { transform: scaleY(1); opacity: 0.8; }
+          50% { transform: scaleY(1.5); opacity: 1; }
+        }
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-12px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+      `}</style>
     </div>
   );
 };
