@@ -58,8 +58,8 @@ export const CustomTitlebar: React.FC = () => {
       {/* Right: Language Pill Selector & Window Controls */}
       <div className="flex items-center gap-4 app-no-drag">
         {/* Language selector: Globe + UZB | ENG | RUS */}
-        <div className="flex items-center bg-[#07132b]/80 border border-nova-border rounded-full p-0.5 shadow-inner">
-          <div className="pl-2 pr-1.5 text-nova-cyan">
+        <div className="flex items-center bg-[#07132b]/80 border border-nova-border/50 hover:border-nova-border rounded-full p-0.5 shadow-inner transition-all duration-200 backdrop-blur-sm">
+          <div className="pl-2 pr-1.5 text-nova-cyan/80">
             <Globe className="w-3.5 h-3.5" />
           </div>
           <div className="flex items-center gap-1 text-xs font-semibold">
@@ -74,10 +74,10 @@ export const CustomTitlebar: React.FC = () => {
                 <button
                   key={lang}
                   onClick={() => setLanguage(lang)}
-                  className={`px-2.5 py-1 rounded-full transition-all duration-200 ${
+                  className={`px-2.5 py-1 rounded-full transition-all duration-300 ${
                     isActive
                       ? 'bg-gradient-to-r from-nova-blue to-nova-cyan text-white shadow-glow-pill font-bold'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/40'
+                      : 'text-slate-400 hover:text-white hover:bg-slate-800/60'
                   }`}
                 >
                   {labels[lang]}
@@ -88,24 +88,24 @@ export const CustomTitlebar: React.FC = () => {
         </div>
 
         {/* Window controls */}
-        <div className="flex items-center gap-1 text-slate-400">
+        <div className="flex items-center gap-0.5 text-slate-400">
           <button
             onClick={handleMinimize}
-            className="w-8 h-8 flex items-center justify-center hover:bg-white/10 hover:text-white rounded transition-colors"
+            className="w-8 h-8 flex items-center justify-center hover:bg-slate-700/60 hover:text-white rounded-md transition-all duration-200"
             title="Minimize"
           >
             <Minus className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={handleMaximize}
-            className="w-8 h-8 flex items-center justify-center hover:bg-white/10 hover:text-white rounded transition-colors"
+            className="w-8 h-8 flex items-center justify-center hover:bg-slate-700/60 hover:text-white rounded-md transition-all duration-200"
             title="Maximize"
           >
             <Square className="w-3 h-3" />
           </button>
           <button
             onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center hover:bg-red-600/80 hover:text-white rounded transition-colors"
+            className="w-8 h-8 flex items-center justify-center hover:bg-red-600/80 hover:text-white rounded-md transition-all duration-200"
             title="Close"
           >
             <X className="w-3.5 h-3.5" />

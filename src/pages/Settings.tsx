@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Settings as SettingsIcon, Shield, Cpu, Mic, Globe, Keyboard, Info, Check } from 'lucide-react';
 import { useLanguage } from '../stores/useLanguageStore';
 import { useSettings } from '../stores/useSettingsStore';
@@ -8,10 +8,18 @@ export const Settings: React.FC = () => {
   const { settings, updateSettings } = useSettings();
   const [activeTab, setActiveTab] = useState<'general' | 'models' | 'shortcuts' | 'privacy' | 'about'>('general');
   const [savedNotice, setSavedNotice] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleSave = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     setSavedNotice(true);
-    setTimeout(() => setSavedNotice(false), 2000);
+    timeoutRef.current = setTimeout(() => setSavedNotice(false), 2000);
   };
 
   return (
@@ -24,8 +32,8 @@ export const Settings: React.FC = () => {
         </div>
 
         {savedNotice && (
-          <span className="flex items-center gap-1 text-xs text-emerald-400 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-500/40 animate-pulse">
-            <Check className="w-3.5 h-3.5" /> Settings Saved Locally
+          <span className="flex items-center gap-1.5 text-xs text-emerald-300 bg-emerald-950/80 px-3 py-1.5 rounded-full border border-emerald-500/50 animate-pulse shadow-glow-cyan-sm" style={{ textShadow: '0 0 8px rgba(52, 211, 153, 0.3)' }}>
+            <Check className="w-4 h-4 flex-shrink-0" /> Settings Saved Locally
           </span>
         )}
       </div>
@@ -228,7 +236,7 @@ export const Settings: React.FC = () => {
         <div className="mt-5 pt-3 border-t border-nova-border/50 flex justify-end">
           <button
             onClick={handleSave}
-            className="px-5 py-2 rounded-xl bg-gradient-to-r from-nova-blue to-nova-cyan text-white text-xs font-bold shadow-glow-pill hover:opacity-95"
+            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-nova-blue to-nova-cyan text-white text-xs font-bold shadow-glow-pill hover:opacity-95 hover:shadow-[0_0_20px_rgba(0,136,255,0.4)] active:scale-95 transition-all duration-200"
           >
             {t('settings.save')}
           </button>

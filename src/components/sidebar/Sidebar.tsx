@@ -45,18 +45,18 @@ export const Sidebar: React.FC = () => {
         {/* Dashboard / Home shortcut button */}
         <button
           onClick={() => navigateTo('dashboard')}
-          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${
+          className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium ${
             activeModule === 'dashboard'
-              ? 'sidebar-item-active text-white'
-              : 'text-slate-300 hover:text-white hover:bg-slate-800/40 border border-transparent'
+              ? 'sidebar-item-active text-white shadow-glow-cyan-sm'
+              : 'text-slate-300 hover:text-white hover:bg-slate-800/50 hover:shadow-glow-cyan-sm border border-transparent hover:border-nova-cyan/30'
           }`}
         >
-          <LayoutDashboard className="w-4 h-4 text-nova-cyan" />
+          <LayoutDashboard className={`w-4 h-4 transition-colors duration-200 ${activeModule === 'dashboard' ? 'text-nova-cyan' : 'text-slate-500'}`} />
           <span className="flex-1 text-left tracking-wide">Overview</span>
-          {activeModule === 'dashboard' && <ChevronRight className="w-4 h-4 text-nova-cyan" />}
+          {activeModule === 'dashboard' && <ChevronRight className="w-4 h-4 text-nova-cyan animate-bounce [animation-delay:-0.5s]" />}
         </button>
 
-        <div className="h-[1px] bg-nova-border/60 my-1"></div>
+        <div className="h-[1px] bg-gradient-to-r from-nova-border/0 via-nova-border/60 to-nova-border/0 my-1.5"></div>
 
         {/* 10 Primary Functional Modules */}
         <div className="flex flex-col gap-1">
@@ -68,20 +68,20 @@ export const Sidebar: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => navigateTo(item.id)}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium group relative ${
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all duration-300 text-sm font-medium group relative ${
                   isActive
-                    ? 'sidebar-item-active text-white font-semibold'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                    ? 'sidebar-item-active text-white font-semibold shadow-glow-cyan-sm'
+                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50 hover:shadow-glow-cyan-sm border border-transparent hover:border-nova-cyan/30'
                 }`}
               >
                 {/* Active left indicator glow */}
                 {isActive && (
-                  <div className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-nova-cyan rounded-r shadow-glow-cyan-sm"></div>
+                  <div className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-nova-cyan rounded-r shadow-glow-cyan-sm animate-pulse"></div>
                 )}
 
                 <Icon
-                  className={`w-4 h-4 transition-colors ${
-                    isActive ? 'text-nova-cyan' : 'text-slate-400 group-hover:text-nova-cyan'
+                  className={`w-4 h-4 transition-all duration-200 flex-shrink-0 ${
+                    isActive ? 'text-nova-cyan scale-110' : 'text-slate-400 group-hover:text-nova-cyan group-hover:scale-110'
                   }`}
                 />
 
@@ -90,7 +90,7 @@ export const Sidebar: React.FC = () => {
                 </span>
 
                 {isActive && (
-                  <ChevronRight className="w-4 h-4 text-nova-cyan transition-transform group-hover:translate-x-0.5" />
+                  <ChevronRight className="w-4 h-4 text-nova-cyan transition-all duration-300 group-hover:translate-x-0.5" />
                 )}
               </button>
             );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mic, Play, Settings as SettingsIcon, Sparkles } from 'lucide-react';
 import { useLanguage } from '../../stores/useLanguageStore';
 import { useRobot } from '../../stores/useRobotStore';
@@ -12,8 +12,16 @@ export const CommandBar: React.FC = () => {
   const [commandText, setCommandText] = useState('');
   const [isVoiceActive, setIsVoiceActive] = useState(false);
   const [routedHint, setRoutedHint] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleToggleVoice = () => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (isVoiceActive) {
       setIsVoiceActive(false);
       setRobotState('IDLE');
@@ -21,7 +29,7 @@ export const CommandBar: React.FC = () => {
       setIsVoiceActive(true);
       setRobotState('LISTENING');
       // Simulated voice input demo
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setCommandText('Translate this text into Russian');
         setIsVoiceActive(false);
         setRobotState('THINKING');
@@ -33,20 +41,21 @@ export const CommandBar: React.FC = () => {
     if (e) e.preventDefault();
     if (!commandText.trim()) return;
 
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     const input = commandText.trim();
     setRobotState('THINKING');
 
     // Intent routing
-    setTimeout(() => {
+    timeoutRef.current = setTimeout(() => {
       const result = IntentRouter.routeCommand(input);
       setRobotState('PROCESSING');
       setRoutedHint(result.explanation);
 
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setRobotState('SUCCESS');
         navigateTo(result.intent);
 
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
           setRobotState('IDLE');
           setRoutedHint(null);
           setCommandText('');

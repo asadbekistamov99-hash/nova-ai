@@ -107,12 +107,12 @@ export const AskAiView: React.FC = () => {
           <h2 className="text-base font-bold text-white tracking-wide">{t('modules.ask_ai')}</h2>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-slate-400">Provider:</span>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-slate-400 font-semibold">Provider:</span>
           <select
             value={selectedProvider}
             onChange={(e) => setSelectedProvider(e.target.value as any)}
-            className="bg-[#091530] text-xs text-nova-cyan border border-nova-border rounded-lg px-2.5 py-1 focus:outline-none focus:border-nova-cyan"
+            className="bg-[#091530]/80 text-xs text-nova-cyan border border-nova-border/60 rounded-lg px-3 py-1.5 focus:outline-none focus:border-nova-cyan focus:shadow-glow-cyan-sm transition-all duration-200 hover:border-nova-border"
           >
             <option value="gemini">Gemini</option>
             <option value="openai">OpenAI</option>
@@ -120,11 +120,11 @@ export const AskAiView: React.FC = () => {
             <option value="ollama">Ollama (Local)</option>
           </select>
 
-          <span className="text-xs text-slate-400">Model:</span>
+          <span className="text-xs text-slate-400 font-semibold">Model:</span>
           <select
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
-            className="bg-[#091530] text-xs text-nova-cyan border border-nova-border rounded-lg px-2.5 py-1 focus:outline-none focus:border-nova-cyan"
+            className="bg-[#091530]/80 text-xs text-nova-cyan border border-nova-border/60 rounded-lg px-3 py-1.5 focus:outline-none focus:border-nova-cyan focus:shadow-glow-cyan-sm transition-all duration-200 hover:border-nova-border"
           >
             {selectedProvider === 'gemini' && (
               <>
@@ -174,10 +174,10 @@ export const AskAiView: React.FC = () => {
             </div>
 
             <div
-              className={`max-w-[75%] p-3.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
+              className={`max-w-[75%] p-4 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap transition-all duration-200 ${
                 m.sender === 'user'
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-tr-none'
-                  : 'glass-panel text-slate-200 rounded-tl-none border border-nova-border/80'
+                  ? 'bg-gradient-to-r from-nova-blue to-blue-500 text-white rounded-tr-none shadow-glow-blue-sm'
+                  : `glass-panel text-slate-200 rounded-tl-none border border-nova-border/80 ${m.error ? 'border-red-400/60 bg-red-950/20' : ''}`
               }`}
             >
               <div className="flex items-center justify-between gap-4 mb-1">
@@ -204,25 +204,26 @@ export const AskAiView: React.FC = () => {
       </div>
 
       {/* Input Form */}
-      <div className="pt-2">
+      <div className="pt-3">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             handleSend();
           }}
-          className="flex items-center gap-2 bg-[#091530]/80 p-1.5 rounded-xl border border-nova-border"
+          className="flex items-center gap-2.5 bg-[#091530]/80 p-2.5 rounded-xl border border-nova-border/60 backdrop-blur-sm focus-within:border-nova-border focus-within:shadow-glow-cyan-sm transition-all duration-200"
         >
           <input
             type="text"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Ask anything or request analysis..."
-            className="flex-1 bg-transparent text-sm text-slate-100 px-3 py-1.5 focus:outline-none placeholder-slate-400"
+            disabled={isLoading}
+            className="flex-1 bg-transparent text-sm text-slate-100 px-3 py-2 focus:outline-none placeholder-slate-500 disabled:opacity-50"
           />
           <button
             type="submit"
-            disabled={!inputText.trim()}
-            className="p-2 rounded-lg bg-nova-cyan text-slate-950 font-bold hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-glow-cyan-sm"
+            disabled={!inputText.trim() || isLoading}
+            className="p-2.5 rounded-lg bg-gradient-to-r from-nova-cyan to-blue-400 text-slate-950 font-bold hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 shadow-glow-cyan-sm hover:shadow-[0_0_16px_rgba(0,229,255,0.4)] active:scale-95"
           >
             <Send className="w-4 h-4" />
           </button>
